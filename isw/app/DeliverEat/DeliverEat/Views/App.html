@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <title></title>
     <link href="../Content/bootstrap.css" rel="stylesheet" />
     <script src="../Scripts/jquery-3.0.0.js"></script>
@@ -10,19 +11,119 @@
 </head>
 
 <body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+            <!-- TODO: Ver como centrar título. Agregar una imágen, no un título -->
+            <div style="color:white">
+                DeliverEat
+            </div>
+        </nav>
+    </header>
     <div class="container">
-        <div class="row">
-            <div class="col-sm">
-                One of three columns
+        <div class="row" style="margin:5px">
+            <!-- TODO:  centrar todo -->
+            <a style="margin:4px">Indique lo que el cadete debe buscar</a>
+            <!-- TODO:  ver si agregar required -->
+            <input type="text" name="buscar" style="margin:4px; width:100%" />
+
+            <!-- Opcional de la imágen -->
+            <!-- TODO:  centrar todo -->
+            <a style="margin:4px">Cargue una imágen (Opcional)</a>
+            <!-- TODO:  ver si agregar required -->
+            <input type="text" name="buscar" style="margin:4px; width:100%" />
+        </div>
+
+        <!-- Comercio -->
+        <div class="row" style="margin:5px;">
+            <!-- TODO:  centrar todo -->
+            <a style="margin:4px">Dirección del comercio</a>
+            <!-- TODO:  ver si agregar required -->
+            <div class="border border-dark rounded" style="width:100%">
+                <div class="flex-column">
+                    <a>Calle: </a>
+                    <input type="text" name="buscar" style="margin:4px; width:100%" />
+                </div>
+                <div class="flex-column">
+                    <a>Número: </a>
+                    <input type="text" name="buscar" style="margin:4px; width:100%" />
+                </div>
+                <div class="flex-column">
+                    <a>Ciudad: </a>
+                    <input type="text" name="buscar" style="margin:4px; width:100%" />
+                </div>
+                <div class="flex-column">
+                    <a>Referencia: </a>
+                    <input type="text" name="buscar" style="margin:4px; width:100%" />
+                </div>
+                <!-- TODO: Centrar botón -->
+                <button>Ubicar en Maps</button>
             </div>
-            <div class="col-sm">
-                One of three columns
+        </div>
+
+        <!-- Direccion entrega -->
+        <div class="row" style="margin:5px;">
+            <!-- TODO:  centrar todo -->
+            <a style="margin:4px">Dirección de entrega</a>
+            <!-- TODO:  ver si agregar required -->
+            <div class="border border-dark rounded" style="width:100%">
+                <div class="flex-column">
+                    <a>Calle: </a>
+                    <input type="text" name="buscar" style="margin:4px; width:100%" />
+                </div>
+                <div class="flex-column">
+                    <a>Número: </a>
+                    <input type="text" name="buscar" style="margin:4px; width:100%" />
+                </div>
+                <div class="flex-column">
+                    <a>Ciudad: </a>
+                    <input type="text" name="buscar" style="margin:4px; width:100%" />
+                </div>
+                <div class="flex-column">
+                    <a>Referencia: </a>
+                    <input type="text" name="buscar" style="margin:4px; width:100%" />
+                </div>
             </div>
-            <div class="col-sm">
-                One of three columns
+        </div>
+
+        <!-- Forma de pago Efectivo -->
+        <div class="row" style="margin:5px;">
+            <!-- TODO:  centrar todo -->
+            <a style="margin:4px">Forma de pago</a>
+            <!-- TODO:  ver si agregar required -->
+            <div class="border border-dark rounded" style="width:100%">
+                <div class="flex-column">
+                    <a>Calle: </a>
+                    <input type="text" name="buscar" style="margin:4px; width:100%" />
+                </div>
+                <div class="flex-column">
+                    <a>Número: </a>
+                    <input type="text" name="buscar" style="margin:4px; width:100%" />
+                </div>
+                <div class="flex-column">
+                    <a>Ciudad: </a>
+                    <input type="text" name="buscar" style="margin:4px; width:100%" />
+                </div>
+                <div class="flex-column">
+                    <a>Referencia: </a>
+                    <input type="text" name="buscar" style="margin:4px; width:100%" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Forma de pago Tarjeta -->
+        <div class="row" style="margin:5px;">
+            <!-- TODO:  centrar todo -->
+            <a style="margin:4px">Forma de pago</a>
+            <!-- TODO:  ver si agregar required -->
+            <div class="border border-dark rounded" style="width:100%">
+                <div style="margin:4px">
+                    <select style="width:100%; margin:4px">
+                        <option value="efectivo">Efectivo</option>
+                        <option value="tarjeta">Tarjeta</option>
+                    </select>
+                </div>
             </div>
         </div>
     </div>
-
 </body>
 </html>
