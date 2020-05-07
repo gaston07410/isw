@@ -56,10 +56,29 @@
                     <input type="text" name="buscar" style="margin:4px; width:100%" />
                 </div>
                 <!-- TODO: Centrar botón -->
-                <button>Ubicar en Maps</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#MapaModal">Ubicar en Maps</button>
             </div>
         </div>
 
+        <div class="modal fade" id="MapaModal" tabindex="-1" role="dialog" aria-labelledby="Ubicar en el Mapa" aria-hidden="true">
+            <div class="modal-dialog" role="contentinfo">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="titulo1">Ubica Manualmente</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-primary">Guardar Lugar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Direccion entrega -->
         <div class="row" style="margin:5px;">
             <!-- TODO:  centrar todo -->
@@ -82,6 +101,7 @@
                     <a>Referencia: </a>
                     <input type="text" name="buscar" style="margin:4px; width:100%" />
                 </div>
+
             </div>
         </div>
 
@@ -109,6 +129,7 @@
                 </div>
             </div>
         </div>
+
 
         <!-- Forma de pago Tarjeta -->
         <div class="row" style="margin:5px;">
