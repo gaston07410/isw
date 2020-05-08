@@ -2,12 +2,20 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title></title>
     <link href="../Content/bootstrap.css" rel="stylesheet" />
     <script src="../Scripts/jquery-3.0.0.js"></script>
     <script src="../Scripts/bootstrap.js"></script>
     <script src="../Scripts/angular.js"></script>
+   <!-- scrip que trae el mapa de la api-->
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0AiNvq4DZ--ZXeud1pUrHiXcCfcGbttk&callback=initMap">
+    </script>
+    <!--Estilos para el mapa-->
+    <link href="../Content/Personal.css" rel="stylesheet" />
+
+    <script src="../Scripts/App.js"></script>
 </head>
 
 <body>
@@ -55,8 +63,8 @@
                     <a>Referencia: </a>
                     <input type="text" name="buscar" style="margin:4px; width:100%" />
                 </div>
-                <!-- TODO: Centrar botón -->
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#MapaModal">Ubicar en Maps</button>
+                <!-- TODO: boton que abre el modal y le pasa las ref del centro de cordoba -->
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#MapaModal" data-lat="-31.4208233" data-long="-64.1887394">Ubicar en Maps</button>
             </div>
         </div>
 
@@ -70,7 +78,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        ...
+                        <div id="map"></div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
