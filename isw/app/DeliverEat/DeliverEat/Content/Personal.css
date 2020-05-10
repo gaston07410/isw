@@ -4,3 +4,11 @@
     width: 100%; /* The width is the width of the web page */
 }
 
+.fields {
+    margin: 4px;
+    width: 100%
+}
+
+.margin-on-form {
+    margin:4px;
+}

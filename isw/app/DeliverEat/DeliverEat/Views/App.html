@@ -23,7 +23,7 @@
         <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
             <!-- TODO: Ver como centrar título. Agregar una imágen, no un título -->
             <div style="color:white">
-                DeliverEat
+                DeliverEat (poner un logo o mejorar esto)
             </div>
         </nav>
     </header>
@@ -32,39 +32,43 @@
             <!-- TODO:  centrar todo -->
             <a style="margin:4px">Indique lo que el cadete debe buscar</a>
             <!-- TODO:  ver si agregar required -->
-            <input type="text" name="buscar" style="margin:4px; width:100%" />
+            <input type="text" name="buscar" class="fields" />
 
             <!-- Opcional de la imágen -->
             <!-- TODO:  centrar todo -->
             <a style="margin:4px">Cargue una imágen (Opcional)</a>
             <!-- TODO:  ver si agregar required -->
-            <input type="text" name="buscar" style="margin:4px; width:100%" />
+            <input type="text" name="search" class="fields" />
         </div>
 
         <!-- Comercio -->
-        <div class="row" style="margin:5px;">
+        <div class="d-flex flex-column" style="margin:5px;">
             <!-- TODO:  centrar todo -->
             <a style="margin:4px">Dirección del comercio</a>
             <!-- TODO:  ver si agregar required -->
-            <div class="border border-dark rounded" style="width:100%">
-                <div class="flex-column">
-                    <a>Calle: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
+            <div class="border border-dark rounded row" style="width:100%; margin:auto;">
+                <div class="d-flex flex-column" style="padding-top:10px">
+                    <a style="min-height:30px" class="margin-on-form">Calle: </a>
+                    <a style="min-height:30px" class="margin-on-form">Número: </a>
+                    <a style="min-height:30px" class="margin-on-form">Ciudad: </a>
+                    <a style="min-height:30px" class="margin-on-form">Referencia: </a>
+
                 </div>
-                <div class="flex-column">
-                    <a>Número: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
+                <div class="d-flex flex-column" style="padding-top:10px">
+                    <input type="text" name="street" class="margin-on-form col" />
+                    <input type="text" name="number" class="margin-on-form col" />
+                    <input type="text" name="city" class="margin-on-form col" />
+                    <input type="text" name="reference" class="margin-on-form col" />
                 </div>
-                <div class="flex-column">
-                    <a>Ciudad: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
+                <div class="d-flex flex-column text-center" style="margin:inherit; padding:5px 0px 10px 0px">
+                    <!-- TODO: boton que abre el modal y le pasa las ref del centro de cordoba -->
+                    <button type="button" style="" class="btn btn-primary" data-toggle="modal" data-target="#MapaModal" data-lat="-31.4208233" data-long="-64.1887394">
+                        Ubicar en Maps
+                    </button>
                 </div>
-                <div class="flex-column">
-                    <a>Referencia: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
-                </div>
-                <!-- TODO: boton que abre el modal y le pasa las ref del centro de cordoba -->
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#MapaModal" data-lat="-31.4208233" data-long="-64.1887394">Ubicar en Maps</button>
+
+
+
             </div>
         </div>
 
@@ -87,53 +91,26 @@
                 </div>
             </div>
         </div>
+
+
         <!-- Direccion entrega -->
-        <div class="row" style="margin:5px;">
+        <div class="d-flex flex-column" style="margin:5px;">
             <!-- TODO:  centrar todo -->
             <a style="margin:4px">Dirección de entrega</a>
             <!-- TODO:  ver si agregar required -->
-            <div class="border border-dark rounded" style="width:100%">
-                <div class="flex-column">
-                    <a>Calle: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
-                </div>
-                <div class="flex-column">
-                    <a>Número: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
-                </div>
-                <div class="flex-column">
-                    <a>Ciudad: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
-                </div>
-                <div class="flex-column">
-                    <a>Referencia: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
-                </div>
+            <div class="border border-dark rounded row" style="width:100%; margin:auto;">
+                <div class="d-flex flex-column" style="padding-top:10px">
+                    <a style="min-height:30px" class="margin-on-form">Calle: </a>
+                    <a style="min-height:30px" class="margin-on-form">Número: </a>
+                    <a style="min-height:30px" class="margin-on-form">Ciudad: </a>
+                    <a style="min-height:30px" class="margin-on-form">Referencia: </a>
 
-            </div>
-        </div>
-
-        <!-- Forma de pago Efectivo -->
-        <div class="row" style="margin:5px;">
-            <!-- TODO:  centrar todo -->
-            <a style="margin:4px">Forma de pago</a>
-            <!-- TODO:  ver si agregar required -->
-            <div class="border border-dark rounded" style="width:100%">
-                <div class="flex-column">
-                    <a>Calle: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
                 </div>
-                <div class="flex-column">
-                    <a>Número: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
-                </div>
-                <div class="flex-column">
-                    <a>Ciudad: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
-                </div>
-                <div class="flex-column">
-                    <a>Referencia: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
+                <div class="d-flex flex-column" style="padding-top:10px">
+                    <input type="text" name="street" class="margin-on-form col" />
+                    <input type="text" name="number" class="margin-on-form col" />
+                    <input type="text" name="city" class="margin-on-form col" />
+                    <input type="text" name="reference" class="margin-on-form col" />
                 </div>
             </div>
         </div>
