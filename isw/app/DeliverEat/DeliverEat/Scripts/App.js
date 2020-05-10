@@ -5,6 +5,7 @@ function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 15,
         center: { lat: -31.4199055, lng: -64.1887394 }
+       
     });
 // insertar marcador//
     marker = new google.maps.Marker({
@@ -14,7 +15,19 @@ function initMap() {
         position: { lat: -31.4208233, lng: -64.1887394 }
     });
     marker.addListener('click', toggleBounce);
+    google.maps.event.addListener(marker, 'dragend', function (evt) {
+        document.getElementById('current').innerHTML = '<p>Marcador situado Lat: ' + evt.latLng.lat().toFixed(3) + '  Long: ' + evt.latLng.lng().toFixed(3) + '</p>';
+    });
+
+    google.maps.event.addListener(marker, 'dragstart', function (evt) {
+        document.getElementById('current').innerHTML = '<p>Moviendo el marcador...</p>';
+    });
+    map.setCenter(marker.position);
+    marker.setMap(map);
+  
 }
+
+
 //movimiento del marcador//
 function toggleBounce() {
     if (marker.getAnimation() !== null) {
@@ -23,6 +36,12 @@ function toggleBounce() {
         marker.setAnimation(google.maps.Animation.BOUNCE);
     }
 }
+
+
+
+
+
+
 
 var app = angular.module("myApp", []);
 
@@ -91,6 +110,35 @@ app.controller("myCtrl", function ($scope) {
 
     $scope.saveMap = function () {
         console.log("marker", marker);
+        lat = marker.getPosition().lat();
+        lng = marker.getPosition().lng();
+        console.log("lat", lat);
+        console.log("lon", lng);
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://trueway-geocoding.p.rapidapi.com/ReverseGeocode?language=en&location="+lat+"%252C"+lng,
+            "method": "GET",
+            "headers": {
+                "x-rapidapi-host": "trueway-geocoding.p.rapidapi.com",
+                "x-rapidapi-key": "8f841d33e4mshbf9cbdc007175bfp1e0139jsn51ca6697e01a"
+            }
+        }
+
+        $.ajax(settings).done(function (response) {
+            
+            resp = response.results[0];
+            $scope.calleMark = resp.street;
+            $scope.numeroMark = resp.house;
+            $scope.ciudadMark = resp.region + ", " + resp.area;
+           
+        });
+
+        $scope.commerceStreet = $scope.calleMark;
+        $scope.commerceNumber = $scope.numeroMark;
+        $scope.commerceCity = $scope.ciudadMark;
+
+        
     };
 
     $scope.validatePay = function () {
