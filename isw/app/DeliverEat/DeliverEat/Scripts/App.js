@@ -115,7 +115,7 @@ app.controller("myCtrl", function ($scope) {
         console.log("lat", lat);
         console.log("lon", lng);
         var settings = {
-            "async": true,
+            "async": false,
             "crossDomain": true,
             "url": "https://trueway-geocoding.p.rapidapi.com/ReverseGeocode?language=en&location="+lat+"%252C"+lng,
             "method": "GET",
