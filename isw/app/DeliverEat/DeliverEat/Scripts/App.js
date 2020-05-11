@@ -128,15 +128,11 @@ app.controller("myCtrl", function ($scope) {
         $.ajax(settings).done(function (response) {
             
             resp = response.results[0];
-            $scope.calleMark = resp.street;
-            $scope.numeroMark = resp.house;
-            $scope.ciudadMark = resp.region + ", " + resp.area;
+            $scope.commerceStreet = resp.street;
+            $scope.commerceNumber = resp.house;
+            $scope.commerceCity = resp.region + ", " + resp.area;
            
         });
-
-        $scope.commerceStreet = $scope.calleMark;
-        $scope.commerceNumber = $scope.numeroMark;
-        $scope.commerceCity = $scope.ciudadMark;
 
         
     };
@@ -151,8 +147,15 @@ app.controller("myCtrl", function ($scope) {
     };
 
     $scope.validateExpirationDate = function () {
-        // TODO: Validar que la fecha ingresada sea superior al día de hoy.
+        $scope.CurrentDate = new Date();
+
+        if ($scope.cardExpirationDate.getTime() <= $scope.CurrentDate.getTime()) {
+            console.log($scope.model_fecha);
+            console.log($scope.CurrentDate);
+            alert("fecha de vencimiento menor a la fecha de hoy ");
+        } else { alert("La fecha de vencimiento es mayor a la fecha de hoy")}
     };
+
 
     $scope.validateCorrectCard = function () {
         $scope.cardsAccepted.forEach(function (card) {

@@ -157,6 +157,7 @@
                     <input type="text" name="cardNumber" class="margin-on-form col" ng-model="cardNumber" maxlength="16" />
                     <!-- TODO: Ver que el vencimiento se muestre DD/MM y no en formato completo -->
                     <input type="date" name="cardExpirationDate" class="margin-on-form col" ng-model="cardExpirationDate" />
+                    <button type="button" class="btn btn-primary" ng-click="validateExpirationDate()">Validar fecha</button>
                     <input type="text" name="cardCvc" class="margin-on-form col" ng-model="cardCvc" maxlength="3" />
                 </div>
                 <div class="d-flex flex-column text-center" style="margin:inherit; padding:5px 0px 10px 0px">
