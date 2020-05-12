@@ -85,6 +85,7 @@ app.controller("myCtrl", function ($scope) {
 
     $scope.search = '';
 
+    $scope.invalidDate = false;
     $scope.commerceStreet = '';
     $scope.commerceNumber = '';
     $scope.commerceCity = '';
@@ -114,8 +115,8 @@ app.controller("myCtrl", function ($scope) {
 
     $scope.cities = [
         { name: "Córdoba Capital" },
-        { name: "Colonia Caroya" },
-        { name: "Jesús María" }
+        { name: "Villa Allende" },
+        { name: "Río Ceballos" }
     ];
 
     $scope.imageURL = '';
@@ -138,8 +139,7 @@ app.controller("myCtrl", function ($scope) {
     $scope.cardNumber = '';
 
     $scope.cardsAccepted = [
-        { number: 1234123412341234, name: "Lionel", lastname: "Messi", monthExpirationDate: 9, yearExpirationDate: 2020, cvc: 123, type: "visa" },
-        { number: 1111111111111111, name: "Paulo", lastname: "Dybala", monthExpirationDate: 9, yearExpirationDate: 2020, cvc: 999, type: "visa" }
+        { number: 1234123412341234, name: "Lionel", lastname: "Messi", monthExpirationDate: 9, yearExpirationDate: 2020, cvc: 123, type: "visa" }
     ];
 
     $scope.cardsType = [
@@ -166,14 +166,11 @@ app.controller("myCtrl", function ($scope) {
 
         $.ajax(settings).done(function (response) {
             resp = response.results[0];
+            console.log("response", response);
             $scope.commerceStreet = resp.street;
             $scope.commerceNumber = parseInt(resp.house);
             $scope.commerceCity = resp.region + ", " + resp.area;
         });
-    };
-
-    $scope.test = function () {
-        console.log("dateDelivery", $scope.dateDelivery);
     };
 
     $scope.validateMethod = function () {
@@ -193,23 +190,29 @@ app.controller("myCtrl", function ($scope) {
     };
 
     $scope.validateDate = function () {
-        if ($scope.dateDelivery.getDate() < $scope.CurrentDate.getDate() && $scope.dateDelivery.getMonth() < $scope.CurrentDate.getMonth() && $scope.dateDelivery.getFullYear() < $scope.CurrentDate.getFullYear()) toastr.error("La fecha ingresada es anterior al día de hoy");
+        if ($scope.dateDelivery < $scope.CurrentDate) {
+            toastr.error("La fecha ingresada es anterior al día de hoy");
+            $scope.invalidDate = true;
+        } else $scope.invalidDate = false;
     };
 
 
     $scope.validateCorrectCard = function () {
         if ($scope.cardType.toLowerCase() !== 'visa') toastr.error('Solo se aceptan tarjetas VISA.');
-        if ($scope.cardExpirationDate.getMonth() < $scope.monthDate || $scope.cardExpirationDate.getFullYear() < $scope.yearDate) toastr.error("Ingrese fecha válida");
+        if (!$scope.cardExpirationDate || ($scope.cardExpirationDate.getMonth() < $scope.monthDate || $scope.cardExpirationDate.getFullYear() < $scope.yearDate)) toastr.error("Ingrese fecha válida");
+        if (!$scope.cardType || !$scope.cardName || !$scope.cardLastname || !$scope.cardNumber || !$scope.cardExpirationDate || !$scope.cardCvc) toastr.error("Complete todos los datos de la tarjeta");
         else {
             $scope.cardsAccepted.forEach(function (card) {
-                if (card.number == $scope.cardNumber) {
-                    if (card.type.toLowerCase() != $scope.cardType.toLowerCase() ||
-                        card.name.toLowerCase() != $scope.cardName.toLowerCase() ||
-                        ($scope.cardExpirationDate.getMonth() !== card.monthExpirationDate && $scope.cardExpirationDate.getFullYear() !== card.yearExpirationDate) ||
-                        card.cvc != $scope.cardCvc ||
-                        card.lastname.toLowerCase() != $scope.cardLastname.toLowerCase()) $scope.validatedCard = false;
-                    else $scope.validatedCard = true;
+                if (card.number != $scope.cardNumber ||
+                    card.type.toLowerCase() != $scope.cardType.toLowerCase() ||
+                    card.name.toLowerCase() != $scope.cardName.toLowerCase() ||
+                    ($scope.cardExpirationDate.getMonth() !== card.monthExpirationDate && $scope.cardExpirationDate.getFullYear() !== card.yearExpirationDate) ||
+                    card.cvc != $scope.cardCvc ||
+                    card.lastname.toLowerCase() != $scope.cardLastname.toLowerCase()) {
+                    $scope.validatedCard = false;
+                    toastr.error('Ingrese tarjeta válida');
                 }
+                else $scope.validatedCard = true;
             });
         }
     };
@@ -219,7 +222,7 @@ app.controller("myCtrl", function ($scope) {
         if (!$scope.search) toastr.error('Complete el campo con lo que el cadete debe buscar');
         else if (!$scope.commerceStreet || !$scope.commerceNumber || !$scope.commerceCity) toastr.error('Revise los campos del domicilio del comercio');
         else if (!$scope.homeStreet || !$scope.homeNumber || !$scope.homeCity) toastr.error('Revise los campos del domicilio de entrega');
-        else if (!$scope.dateOfDelivery || ($scope.dateOfDelivery === 'Otro' && !$scope.dateDelivery)) toastr.error('Revise los campos de la fecha de entrega');
+        else if (!$scope.dateOfDelivery || ($scope.dateOfDelivery === 'Otro' && !$scope.dateDelivery) || $scope.invalidDate) toastr.error('Revise los campos de la fecha de entrega');
         else if (!$scope.validatePaid && !$scope.validatedCard) {
             if (!$scope.validatePaid) toastr.error('Revise el monto ingresado');
             else toastr.error('Revise los datos de la tarjeta');
