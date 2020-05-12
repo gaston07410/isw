@@ -74,10 +74,11 @@ app.directive('asCurrency', function (currencyFilter) {
             });
         }
     };
-})
+});
 
 app.controller("myCtrl", function ($scope) {
 
+    $scope.CurrentDate = new Date();
     var date = new Date();
     $scope.monthDate = date.getMonth();
     $scope.yearDate = date.getFullYear();
@@ -97,6 +98,13 @@ app.controller("myCtrl", function ($scope) {
     $scope.price = Math.floor(Math.random() * 500);
     $scope.amountToPay = 0;
     $scope.change = 0;
+
+    $scope.dateDelivery = '';
+    $scope.dateOfDelivery = '';
+    $scope.deliveries = [
+        { value: 'Lo antes posible' },
+        { value: 'Otro' }
+    ];
 
     $scope.selectedPaymentMethods = '';
     $scope.paymentMethods = [
@@ -141,7 +149,7 @@ app.controller("myCtrl", function ($scope) {
 
     $scope.validatedCard = false;
     $scope.validatePaid = false;
-
+        
     $scope.saveMap = function () {
         lat = marker.getPosition().lat();
         lng = marker.getPosition().lng();
@@ -158,11 +166,14 @@ app.controller("myCtrl", function ($scope) {
 
         $.ajax(settings).done(function (response) {
             resp = response.results[0];
-            console.log(resp)
             $scope.commerceStreet = resp.street;
             $scope.commerceNumber = parseInt(resp.house);
             $scope.commerceCity = resp.region + ", " + resp.area;
         });
+    };
+
+    $scope.test = function () {
+        console.log("dateDelivery", $scope.dateDelivery);
     };
 
     $scope.validateMethod = function () {
@@ -181,23 +192,17 @@ app.controller("myCtrl", function ($scope) {
         }
     };
 
-    $scope.validateExpirationDate = function () {
-        $scope.CurrentDate = new Date();
-
-        if ($scope.cardExpirationDate.getTime() <= $scope.CurrentDate.getTime()) {
-            alert("fecha de vencimiento menor a la fecha de hoy ");
-        } else { alert("La fecha de vencimiento es mayor a la fecha de hoy")}
+    $scope.validateDate = function () {
+        if ($scope.dateDelivery.getDate() < $scope.CurrentDate.getDate() && $scope.dateDelivery.getMonth() < $scope.CurrentDate.getMonth() && $scope.dateDelivery.getFullYear() < $scope.CurrentDate.getFullYear()) toastr.error("La fecha ingresada es anterior al día de hoy");
     };
 
 
     $scope.validateCorrectCard = function () {
-        if ($scope.cardExpirationDate.getMonth() < $scope.monthDate || $scope.cardExpirationDate.getFullYear() < $scope.yearDate) console.log("Ingrese fecha válida.");
+        if ($scope.cardType.toLowerCase() !== 'visa') toastr.error('Solo se aceptan tarjetas VISA.');
+        if ($scope.cardExpirationDate.getMonth() < $scope.monthDate || $scope.cardExpirationDate.getFullYear() < $scope.yearDate) toastr.error("Ingrese fecha válida");
         else {
             $scope.cardsAccepted.forEach(function (card) {
-                // No es !== porque algunos son strings y otros son number
                 if (card.number == $scope.cardNumber) {
-                    // TODO: agregar mensaje de error cuando no es tarjeta VISA
-                    if (card.type.toLowerCase() !== 'visa') console.log("Solo se permite tarjetas VISA");
                     if (card.type.toLowerCase() != $scope.cardType.toLowerCase() ||
                         card.name.toLowerCase() != $scope.cardName.toLowerCase() ||
                         ($scope.cardExpirationDate.getMonth() !== card.monthExpirationDate && $scope.cardExpirationDate.getFullYear() !== card.yearExpirationDate) ||
@@ -210,14 +215,18 @@ app.controller("myCtrl", function ($scope) {
     };
 
     $scope.validateOrder = function () {
-        // TODO: agregar mensaje de error en cada caso
-        if (!$scope.search) console.log('Cargue algo para que el cadete busque');
-        else if (!$scope.commerceStreet || !$scope.commerceNumber || !$scope.commerceCity) console.log('Revise los campos del domicilio del comercio');
-        else if (!$scope.homeStreet || !$scope.homeNumber || !$scope.homeCity) console.log('Revise los campos del domicilio de entrega');
+
+        if (!$scope.search) toastr.error('Complete el campo con lo que el cadete debe buscar');
+        else if (!$scope.commerceStreet || !$scope.commerceNumber || !$scope.commerceCity) toastr.error('Revise los campos del domicilio del comercio');
+        else if (!$scope.homeStreet || !$scope.homeNumber || !$scope.homeCity) toastr.error('Revise los campos del domicilio de entrega');
+        else if (!$scope.dateOfDelivery || ($scope.dateOfDelivery === 'Otro' && !$scope.dateDelivery)) toastr.error('Revise los campos de la fecha de entrega');
         else if (!$scope.validatePaid && !$scope.validatedCard) {
-            if (!$scope.validatePaid) console.log('Revise el monto ingresado');
-            else console.log('Revise los datos de la tarjeta');
+            if (!$scope.validatePaid) toastr.error('Revise el monto ingresado');
+            else toastr.error('Revise los datos de la tarjeta');
         }
-        else if (confirm("¿Estás seguro(a) de realizar este pedido?")) console.log("Pedido realizado con éxito.");
-        };
+        else {
+            if ($scope.dateOfDelivery === 'Lo antes posible') toastr.success("El pedido fue enviado, el cadete le entregará su producto lo antes posible");
+            else toastr.success("El pedido fue enviado, el cadete le entregará su producto en la fecha seleccionada");
+        }
+    };
 });
