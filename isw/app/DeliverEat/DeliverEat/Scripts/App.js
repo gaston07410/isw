@@ -45,6 +45,36 @@ function toggleBounce() {
 
 var app = angular.module("myApp", []);
 
+app.directive('asCurrency', function (currencyFilter) {
+    return {
+        restrict: 'A',
+        require: '?ngModel',
+        link: function (scope, elem, attrs, ctrl) {
+            if (!ctrl) return;
+
+            var sanitize = function (s) {
+                return s.replace(/[^\d|\-+|\.+]/g, '');
+            }
+
+            var convert = function () {
+                var plain = sanitize(ctrl.$viewValue);
+                ctrl.$setViewValue(currencyFilter(plain));
+                ctrl.$render();
+            };
+
+            elem.on('blur', convert);
+
+            ctrl.$formatters.push(function (a) {
+                return currencyFilter(a);
+            });
+
+            ctrl.$parsers.push(function (a) {
+                return sanitize(a);
+            });
+        }
+    };
+})
+
 app.controller("myCtrl", function ($scope) {
 
     var date = new Date();

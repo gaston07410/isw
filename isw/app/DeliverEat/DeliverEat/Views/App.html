@@ -20,10 +20,11 @@
 
 <body ng-app="myApp" ng-controller="myCtrl">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-dark bg-dark" style="min-height:50px">
+        <nav class="navbar navbar-expand-sm" style="min-height:50px">
             <!-- TODO: Ver como centrar título. Agregar una imágen, no un título o mejorar el texto -->
-            <div style="color:white">
-                DeliverEat (poner un logo o mejorar esto)
+            <div style="width:100%" class="text-center">
+                <!--<a class="text-center">DeliverEat</a>-->
+                <img style="max-width:90px" src="../images/deliverEat.png" />
             </div>
         </nav>
     </header>
@@ -34,17 +35,14 @@
 
             <!-- Opcional de la imágen -->
             <a style="margin:4px">Cargue una imágen (Opcional)</a>
-            <input type="file" onchange="angular.element(this).scope().SelectFile(event)" />
+            <input type="file" onchange="angular.element(this).scope().SelectFile(event)" style="margin-top:5px"/>
             <hr />
-            <img ng-src="{{PreviewImage}}" ng-show="PreviewImage != null" alt="" style="max-height:200px;width:100%" />
-
+            <img ng-src="{{PreviewImage}}" ng-show="PreviewImage != null" alt="" style="max-height:200px;width:100%; margin-top:5px" />
         </div>
 
         <!-- Comercio -->
-        <div class="d-flex flex-column" style="margin:5px;">
-            <!-- TODO:  centrar todo -->
-            <a style="margin:4px">Dirección del comercio</a>
-            <!-- TODO:  ver si agregar required -->
+        <div class="d-flex flex-column" style="margin:20px 5px 5px 5px;">
+            <a style="margin:4px; font-weight:bold; font-family: sans-serif;" class="text-center">Dirección del comercio</a>
             <div class="border border-dark rounded row" style="width:100%; margin:auto;">
                 <div class="d-flex flex-column" style="padding:5px 0px 5px 5px">
                     <a style="min-height:30px" class="margin-on-form">Calle: </a>
@@ -54,10 +52,10 @@
 
                 </div>
                 <div class="d-flex flex-column" style="padding:5px 0px 5px 0px">
-                    <input type="text" name="street" class="margin-on-form col rounded" ng-model="commerceStreet" placeholder="Ej: Montevideo"/>
-                    <input type="number" name="number" class="margin-on-form col rounded" ng-model="commerceNumber" placeholder="Ej: 125"/>
-                    <input type="text" name="city" class="margin-on-form col rounded" ng-model="commerceCity" placeholder="Ej: Córdoba"/>
-                    <input type="text" name="reference" class="margin-on-form col rounded" ng-model="commerceReference" placeholder="Ej: Entre calles Perú y Trejo"/>
+                    <input type="text" name="street" class="margin-on-form col rounded" ng-model="commerceStreet" placeholder="Ej: Montevideo" />
+                    <input type="number" name="number" class="margin-on-form col rounded" ng-model="commerceNumber" placeholder="Ej: 125" />
+                    <input type="text" name="city" class="margin-on-form col rounded" ng-model="commerceCity" placeholder="Ej: Córdoba" />
+                    <input type="text" name="reference" class="margin-on-form col rounded" ng-model="commerceReference" placeholder="Ej: Entre calles Perú y Trejo" />
                 </div>
                 <div class="d-flex flex-column text-center" style="margin:inherit; padding:5px 0px 10px 0px">
                     <!-- TODO: boton que abre el modal y le pasa las ref del centro de cordoba -->
@@ -89,11 +87,10 @@
             </div>
         </div>
 
-
         <!-- Direccion entrega -->
-        <div class="d-flex flex-column" style="margin:5px;">
-            <a style="margin:4px">Dirección de entrega</a>
-             <div class="border border-dark rounded row" style="width:100%; margin:auto;">
+        <div class="d-flex flex-column" style="margin:20px 5px 5px 5px;">
+            <a style="margin:4px;font-weight:bold;" class="text-center">Dirección de entrega</a>
+            <div class="border border-dark rounded row" style="width:100%; margin:auto;">
                 <div class="d-flex flex-column" style="padding:5px 0px 5px 5px">
                     <a style="min-height:30px" class="margin-on-form">Calle: </a>
                     <a style="min-height:30px" class="margin-on-form">Número: </a>
@@ -101,25 +98,26 @@
                     <a style="min-height:30px" class="margin-on-form">Referencia: </a>
                 </div>
                 <div class="d-flex flex-column" style="padding:5px 0px 5px 0px">
-                    <input type="text" name="street" class="margin-on-form col rounded" ng-model="homeStreet" placeholder="Ej: Montevideo"/>
-                    <input type="number" name="number" class="margin-on-form col rounded" ng-model="homeNumber" placeholder="Ej: 125"/>
+                    <input type="text" name="street" class="margin-on-form col rounded" ng-model="homeStreet" placeholder="Ej: Montevideo" />
+                    <input type="number" name="number" class="margin-on-form col rounded" ng-model="homeNumber" placeholder="Ej: 125" />
                     <select class="margin-on-form col rounded" ng-model="homeCity">
-                        <option ng-repeat="city in cities" value="city.name" >{{city.name}}</option>
+                        <option ng-repeat="city in cities" value="city.name">{{city.name}}</option>
                     </select>
-                    <input type="text" name="reference" class="margin-on-form col rounded" ng-model="homeReference" placeholder="Ej: Entre calles Perú y Trejo"/>
+                    <input type="text" name="reference" class="margin-on-form col rounded" ng-model="homeReference" placeholder="Ej: Entre calles Perú y Trejo" />
                 </div>
             </div>
         </div>
 
 
         <!-- Forma de pago Tarjeta -->
-        <div class="d-flex flex-column" style="margin:5px;">
-            <a style="margin:4px">Forma de pago</a>
+        <div class="d-flex flex-column" style="margin:20px 5px 5px 5px;">
+            <a style="margin:4px; font-weight:bold" class="text-center">Forma de pago</a>
+            <a style="margin:4px;">Seleccione la forma de pago</a>
             <select class="margin-on-form col rounded" style="width:auto" ng-change="validateMethod()" ng-model="selectedPaymentMethods">
                 <option ng-repeat="method in paymentMethods" value="{{method.name}}">{{method.name}}</option>
             </select>
             <div>
-                <a ng-show="selectedPaymentMethods">Monto a pagar: {{price}}</a>
+                <a ng-show="selectedPaymentMethods">Monto a pagar: {{price | currency}}</a>
             </div>
 
             <!-- Pago en efectivo -->
@@ -127,11 +125,11 @@
                 <div class="row" style="padding:5px 20px 5px 5px">
                     <a style="min-height:30px" class="margin-on-form col">Ingrese monto: </a>
                     <!--TODO: Validar que el el amountToPay sea mayor al price-->
-                    <input type="number" name="amountToPay" class="margin-on-form col rounded" ng-model="amountToPay" ng-change="validatePay()" />
+                    <input class="margin-on-form col rounded" as-currency ng-model="amountToPay" ng-change="validatePay()" />
                 </div>
                 <div class="row flex-wrap" style="padding:5px 20px 5px 5px">
                     <a style="min-height:30px" class="margin-on-form col">Su vuelto es de: </a>
-                    <input type="text" name="change" class="margin-on-form col rounded" ng-model="change" readonly />
+                    <input class="margin-on-form col rounded" as-currency ng-model="change" readonly />
                 </div>
             </div>
 
@@ -172,6 +170,20 @@
                     Validar pedido
                 </button>
             </div>
+
+            <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#message" data-lat="-31.4208233" data-long="-64.1887394"></button>
+    <div class="modal fade" id="message" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+        <div class="modal-dialog" role="contentinfo">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div id="search">Agregar mensaje acá</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div> -->
         </div>
     </div>
 </body>
