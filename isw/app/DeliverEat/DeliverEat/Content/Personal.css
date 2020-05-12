@@ -1,0 +1,20 @@
+﻿/* necesario para el mapa, se separo del html para tener mejor organizacion */
+#map {
+    height: 400px; /* The height is 400 pixels */
+    width: 100%; /* The width is the width of the web page */
+}
+
+.fields {
+    margin: 4px;
+    width: 100%;
+    padding: 0px 14px 0px 14px
+}
+
+.margin-on-form {
+    margin:4px;
+}
+
+
+a {
+    font-family: sans-serif;
+}

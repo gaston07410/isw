@@ -2,127 +2,217 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title></title>
     <link href="../Content/bootstrap.css" rel="stylesheet" />
     <script src="../Scripts/jquery-3.0.0.js"></script>
     <script src="../Scripts/bootstrap.js"></script>
     <script src="../Scripts/angular.js"></script>
+   <!-- scrip que trae el mapa de la api-->
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0AiNvq4DZ--ZXeud1pUrHiXcCfcGbttk&callback=initMap">
+    </script>
+    <!--Estilos para el mapa-->
+    <link href="../Content/Personal.css" rel="stylesheet" />
+
+    <script src="../Scripts/App.js"></script>
 </head>
 
-<body>
+<body ng-app="myApp" ng-controller="myCtrl">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-            <!-- TODO: Ver como centrar título. Agregar una imágen, no un título -->
-            <div style="color:white">
-                DeliverEat
+        <nav class="navbar navbar-expand-sm" style="min-height:50px">
+            <!-- TODO: Ver como centrar título. Agregar una imágen, no un título o mejorar el texto -->
+            <div style="width:100%" class="text-center">
+                <!--<a class="text-center">DeliverEat</a>-->
+                <img style="max-width:90px" src="../images/deliverEat.png" />
             </div>
         </nav>
     </header>
     <div class="container">
         <div class="row" style="margin:5px">
-            <!-- TODO:  centrar todo -->
-            <a style="margin:4px">Indique lo que el cadete debe buscar</a>
-            <!-- TODO:  ver si agregar required -->
-            <input type="text" name="buscar" style="margin:4px; width:100%" />
+            <a style="margin:4px;">Indique lo que el cadete debe buscar</a>
+            <input type="text" name="buscar" class="fields rounded" placeholder="Ej: Una mochila" ng-model="search" />
 
             <!-- Opcional de la imágen -->
-            <!-- TODO:  centrar todo -->
             <a style="margin:4px">Cargue una imágen (Opcional)</a>
-            <!-- TODO:  ver si agregar required -->
-            <input type="text" name="buscar" style="margin:4px; width:100%" />
+            <input type="file" onchange="angular.element(this).scope().SelectFile(event)" style="margin-top:5px"/>
+            <hr />
+            <img ng-src="{{PreviewImage}}" ng-show="PreviewImage != null" alt="" style="max-height:200px;width:100%; margin-top:5px" />
         </div>
 
         <!-- Comercio -->
-        <div class="row" style="margin:5px;">
-            <!-- TODO:  centrar todo -->
-            <a style="margin:4px">Dirección del comercio</a>
-            <!-- TODO:  ver si agregar required -->
-            <div class="border border-dark rounded" style="width:100%">
-                <div class="flex-column">
-                    <a>Calle: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
+        <div class="d-flex flex-column" style="margin:20px 5px 5px 5px;">
+            <a style="margin:4px; font-weight:bold; font-family: sans-serif;" class="text-center">Dirección del comercio</a>
+            <div class="border border-dark rounded row" style="width:100%; margin:auto;">
+                <div class="d-flex flex-column" style="padding:5px 0px 5px 5px">
+                    <a style="min-height:30px" class="margin-on-form">Calle: </a>
+                    <a style="min-height:30px" class="margin-on-form">Número: </a>
+                    <a style="min-height:30px" class="margin-on-form">Ciudad: </a>
+                    <a style="min-height:30px" class="margin-on-form">Referencia: </a>
+
                 </div>
-                <div class="flex-column">
-                    <a>Número: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
+                <div class="d-flex flex-column" style="padding:5px 0px 5px 0px">
+                    <input type="text" name="street" class="margin-on-form col rounded" ng-model="commerceStreet" placeholder="Ej: Montevideo" />
+                    <input type="number" name="number" class="margin-on-form col rounded" ng-model="commerceNumber" placeholder="Ej: 125" />
+                    <input type="text" name="city" class="margin-on-form col rounded" ng-model="commerceCity" placeholder="Ej: Córdoba" />
+                    <input type="text" name="reference" class="margin-on-form col rounded" ng-model="commerceReference" placeholder="Ej: Entre calles Perú y Trejo" />
                 </div>
-                <div class="flex-column">
-                    <a>Ciudad: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
+                <div class="d-flex flex-column text-center" style="margin:inherit; padding:5px 0px 10px 0px">
+                    <!-- TODO: boton que abre el modal y le pasa las ref del centro de cordoba -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#MapaModal" data-lat="-31.4208233" data-long="-64.1887394">
+                        Ubicar en Maps
+                    </button>
                 </div>
-                <div class="flex-column">
-                    <a>Referencia: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
+            </div>
+        </div>
+
+        <div class="modal fade" id="MapaModal" tabindex="-1" role="dialog" aria-labelledby="Ubicar en el Mapa" aria-hidden="true">
+            <div class="modal-dialog" role="contentinfo">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="titulo1">Ubica Manualmente</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="current">Ubicar Marcador en la posicion deseada</div>
+                        <div id="map"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-primary" ng-click="saveMap()" data-dismiss="modal">Guardar Lugar</button>
+                    </div>
                 </div>
-                <!-- TODO: Centrar botón -->
-                <button>Ubicar en Maps</button>
             </div>
         </div>
 
         <!-- Direccion entrega -->
-        <div class="row" style="margin:5px;">
-            <!-- TODO:  centrar todo -->
-            <a style="margin:4px">Dirección de entrega</a>
-            <!-- TODO:  ver si agregar required -->
-            <div class="border border-dark rounded" style="width:100%">
-                <div class="flex-column">
-                    <a>Calle: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
+        <div class="d-flex flex-column" style="margin:20px 5px 5px 5px;">
+            <a style="margin:4px;font-weight:bold;" class="text-center">Dirección de entrega</a>
+            <div class="border border-dark rounded row" style="width:100%; margin:auto;">
+                <div class="d-flex flex-column" style="padding:5px 0px 5px 5px">
+                    <a style="min-height:30px" class="margin-on-form">Calle: </a>
+                    <a style="min-height:30px" class="margin-on-form">Número: </a>
+                    <a style="min-height:30px" class="margin-on-form">Ciudad: </a>
+                    <a style="min-height:30px" class="margin-on-form">Referencia: </a>
                 </div>
-                <div class="flex-column">
-                    <a>Número: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
-                </div>
-                <div class="flex-column">
-                    <a>Ciudad: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
-                </div>
-                <div class="flex-column">
-                    <a>Referencia: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
+                <div class="d-flex flex-column" style="padding:5px 0px 5px 0px">
+                    <input type="text" name="street" class="margin-on-form col rounded" ng-model="homeStreet" placeholder="Ej: Montevideo" />
+                    <input type="number" name="number" class="margin-on-form col rounded" ng-model="homeNumber" placeholder="Ej: 125" />
+                    <select class="margin-on-form col rounded" ng-model="homeCity">
+                        <option ng-repeat="city in cities" value="city.name">{{city.name}}</option>
+                    </select>
+                    <input type="text" name="reference" class="margin-on-form col rounded" ng-model="homeReference" placeholder="Ej: Entre calles Perú y Trejo" />
                 </div>
             </div>
         </div>
 
-        <!-- Forma de pago Efectivo -->
-        <div class="row" style="margin:5px;">
-            <!-- TODO:  centrar todo -->
-            <a style="margin:4px">Forma de pago</a>
-            <!-- TODO:  ver si agregar required -->
-            <div class="border border-dark rounded" style="width:100%">
-                <div class="flex-column">
-                    <a>Calle: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
-                </div>
-                <div class="flex-column">
-                    <a>Número: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
-                </div>
-                <div class="flex-column">
-                    <a>Ciudad: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
-                </div>
-                <div class="flex-column">
-                    <a>Referencia: </a>
-                    <input type="text" name="buscar" style="margin:4px; width:100%" />
-                </div>
-            </div>
-        </div>
 
         <!-- Forma de pago Tarjeta -->
-        <div class="row" style="margin:5px;">
-            <!-- TODO:  centrar todo -->
-            <a style="margin:4px">Forma de pago</a>
-            <!-- TODO:  ver si agregar required -->
-            <div class="border border-dark rounded" style="width:100%">
-                <div style="margin:4px">
-                    <select style="width:100%; margin:4px">
-                        <option value="efectivo">Efectivo</option>
-                        <option value="tarjeta">Tarjeta</option>
-                    </select>
+        <div class="d-flex flex-column" style="margin:20px 5px 5px 5px;">
+            <a style="margin:4px; font-weight:bold" class="text-center">Forma de pago</a>
+            <a style="margin:4px;">Seleccione la forma de pago</a>
+            <select class="margin-on-form col rounded" style="width:auto" ng-change="validateMethod()" ng-model="selectedPaymentMethods">
+                <option ng-repeat="method in paymentMethods" value="{{method.name}}">{{method.name}}</option>
+            </select>
+            <div style="padding:10px 20px 10px 5px">
+                <a ng-show="selectedPaymentMethods">Monto a pagar: {{price | currency}}</a>
+            </div>
+
+            <!-- Pago en efectivo -->
+            <div ng-show="selectedPaymentMethods == 'Efectivo'" class="border border-dark rounded row" style="margin:auto">
+                <div class="row" style="padding:5px 20px 5px 5px">
+                    <a style="min-height:30px" class="margin-on-form col">Ingrese monto: </a>
+                    <!--TODO: Validar que el el amountToPay sea mayor al price-->
+                    <input class="margin-on-form col rounded" as-currency ng-model="amountToPay" ng-change="validatePay()" />
+                </div>
+                <div class="row flex-wrap" style="padding:5px 20px 5px 5px">
+                    <a style="min-height:30px" class="margin-on-form col">Su vuelto es de: </a>
+                    <input class="margin-on-form col rounded" as-currency ng-model="change" readonly />
                 </div>
             </div>
+
+
+            <!-- Pago en tarjeta -->
+            <div ng-show="selectedPaymentMethods == 'Tarjeta'" class="border border-dark rounded row" style="width:100%; margin:auto">
+                <div class="d-flex flex-column" style="padding:5px 0px 5px 5px">
+                    <a style="min-height:30px" class="margin-on-form">Tipo: </a>
+                    <a style="min-height:30px" class="margin-on-form">Nombre: </a>
+                    <a style="min-height:30px" class="margin-on-form">Apellido: </a>
+                    <a style="min-height:30px" class="margin-on-form">Número: </a>
+                    <a style="min-height:30px" class="margin-on-form">Vencim: </a>
+                    <a style="min-height:30px" class="margin-on-form">CVC: </a>
+                </div>
+                <div class="d-flex flex-column" style="padding:5px 0px 5px 0px">
+                    <select class="margin-on-form col rounded" ng-model="cardType">
+                        <option ng-repeat="card in cardsType" value="{{card.type}}">{{card.type}}</option>
+                    </select>
+                    <input type="text" name="cardName" class="margin-on-form col rounded" ng-model="cardName" />
+                    <input type="text" name="cardLastname" class="margin-on-form col rounded" ng-model="cardLastname" />
+                    <input type="number" name="cardNumber" class="margin-on-form col rounded" ng-model="cardNumber" maxlength="16" />
+                    <!-- TODO: Ver que el vencimiento se muestre DD/MM y no en formato completo -->
+                    <input type="date" name="cardExpirationDate" class="margin-on-form col rounded" ng-model="cardExpirationDate" />
+                    <!-- <button type="button" class="btn btn-primary" ng-click="validateExpirationDate()">Validar fecha</button> -->
+                    <input type="text" name="cardCvc" class="margin-on-form col rounded" ng-model="cardCvc" maxlength="3" />
+                </div>
+                <div class="d-flex flex-column text-center" style="margin:inherit; padding:5px 0px 10px 0px">
+                    <!-- TODO: boton que abre el modal y le pasa las ref del centro de cordoba -->
+                    <button type="button" class="btn btn-primary" ng-click="validateCorrectCard()">
+                        Validar tarjeta
+                    </button>
+                </div>
+            </div>
+
+            <div ng-show="validatedCard || validatePaid" class="d-flex flex-column text-center" style="margin:inherit; padding:5px 0px 10px 0px">
+                <button type="button" class="btn btn-primary" ng-click="validateOrder()">
+                    Realizar Pedido
+                </button>
+            </div>
+
+            <!--
+            <div class="modal fade" id="Confirme" tabindex="-1" role="dialog" aria-labelledby="Confirme el pedido" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirme Pedido</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Desea confirmar el pedido?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#Success">Confirmar Pedido</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="Success" tabindex="-1" role="dialog" aria-labelledby="Pedido Confirmado" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div style="width:100%" class="text-center">
+                            <h5 class="modal-title">Pedido confirmado</h5>
+                        </div>
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Pedido confirmado, el cadete ya está en búsqueda de su producto</p>
+                    </div>
+                    <div class="modal-footer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    -->
+
         </div>
     </div>
 </body>
