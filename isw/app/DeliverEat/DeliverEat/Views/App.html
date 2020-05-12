@@ -8,7 +8,9 @@
     <script src="../Scripts/jquery-3.0.0.js"></script>
     <script src="../Scripts/bootstrap.js"></script>
     <script src="../Scripts/angular.js"></script>
-   <!-- scrip que trae el mapa de la api-->
+    <link href="../Content/toastr.css" rel="stylesheet" />
+    <script src="../Scripts/toastr.js"></script>
+    <!-- scrip que trae el mapa de la api-->
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0AiNvq4DZ--ZXeud1pUrHiXcCfcGbttk&callback=initMap">
     </script>
@@ -21,9 +23,7 @@
 <body ng-app="myApp" ng-controller="myCtrl">
     <header>
         <nav class="navbar navbar-expand-sm" style="min-height:50px">
-            <!-- TODO: Ver como centrar título. Agregar una imágen, no un título o mejorar el texto -->
             <div style="width:100%" class="text-center">
-                <!--<a class="text-center">DeliverEat</a>-->
                 <img style="max-width:90px" src="../images/deliverEat.png" />
             </div>
         </nav>
@@ -35,9 +35,10 @@
 
             <!-- Opcional de la imágen -->
             <a style="margin:4px">Cargue una imágen (Opcional)</a>
-            <input type="file" onchange="angular.element(this).scope().SelectFile(event)" style="margin-top:5px"/>
+            <input type="file" onchange="angular.element(this).scope().SelectFile(event)" style="margin-top:5px" />
             <hr />
             <img ng-src="{{PreviewImage}}" ng-show="PreviewImage != null" alt="" style="max-height:200px;width:100%; margin-top:5px" />
+
         </div>
 
         <!-- Comercio -->
@@ -52,7 +53,7 @@
 
                 </div>
                 <div class="d-flex flex-column" style="padding:5px 0px 5px 0px">
-                    <input type="text" name="street" class="margin-on-form col rounded" ng-model="commerceStreet" placeholder="Ej: Montevideo" />
+                    <input type="text" name="commerceStreet" class="margin-on-form col rounded" ng-model="commerceStreet" placeholder="Ej: Montevideo" required />
                     <input type="number" name="number" class="margin-on-form col rounded" ng-model="commerceNumber" placeholder="Ej: 125" />
                     <input type="text" name="city" class="margin-on-form col rounded" ng-model="commerceCity" placeholder="Ej: Córdoba" />
                     <input type="text" name="reference" class="margin-on-form col rounded" ng-model="commerceReference" placeholder="Ej: Entre calles Perú y Trejo" />
@@ -108,12 +109,25 @@
             </div>
         </div>
 
+        <!-- Fecha de entrega -->
+        <div class="d-flex flex-column" style="margin:20px 5px 5px 5px;">
+            <a style="margin:4px;font-weight:bold;" class="text-center">Fecha de entrega</a>
+            <a style="margin:4px;">Indique cuándo quiere recibir el producto:</a>
+            <select class="margin-on-form col rounded" style="width:auto" ng-model="dateOfDelivery">
+                <option ng-repeat="delivery in deliveries" value="{{delivery.value}}">{{delivery.value}}</option>
+            </select>
+
+            <div ng-show="dateOfDelivery === 'Otro'" style="padding:10px 20px 10px 5px">
+                <a style="margin:4px;">Ingrese fecha de entrega</a>
+                <input type="date" name="cardExpirationDate" class="margin-on-form col rounded" ng-model="dateDelivery" ng-change="validateDate()"/>
+            </div>
+        </div>
 
         <!-- Forma de pago Tarjeta -->
         <div class="d-flex flex-column" style="margin:20px 5px 5px 5px;">
             <a style="margin:4px; font-weight:bold" class="text-center">Forma de pago</a>
             <a style="margin:4px;">Seleccione la forma de pago</a>
-            <select class="margin-on-form col rounded" style="width:auto" ng-change="validateMethod()" ng-model="selectedPaymentMethods">
+            <select class="margin-on-form col rounded" style="width:auto" ng-model="selectedPaymentMethods">
                 <option ng-repeat="method in paymentMethods" value="{{method.name}}">{{method.name}}</option>
             </select>
             <div style="padding:10px 20px 10px 5px">
@@ -151,9 +165,7 @@
                     <input type="text" name="cardName" class="margin-on-form col rounded" ng-model="cardName" />
                     <input type="text" name="cardLastname" class="margin-on-form col rounded" ng-model="cardLastname" />
                     <input type="number" name="cardNumber" class="margin-on-form col rounded" ng-model="cardNumber" maxlength="16" />
-                    <!-- TODO: Ver que el vencimiento se muestre DD/MM y no en formato completo -->
                     <input type="date" name="cardExpirationDate" class="margin-on-form col rounded" ng-model="cardExpirationDate" />
-                    <!-- <button type="button" class="btn btn-primary" ng-click="validateExpirationDate()">Validar fecha</button> -->
                     <input type="text" name="cardCvc" class="margin-on-form col rounded" ng-model="cardCvc" maxlength="3" />
                 </div>
                 <div class="d-flex flex-column text-center" style="margin:inherit; padding:5px 0px 10px 0px">
@@ -171,47 +183,47 @@
             </div>
 
             <!--
-            <div class="modal fade" id="Confirme" tabindex="-1" role="dialog" aria-labelledby="Confirme el pedido" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Confirme Pedido</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Desea confirmar el pedido?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#Success">Confirmar Pedido</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="Success" tabindex="-1" role="dialog" aria-labelledby="Pedido Confirmado" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <div style="width:100%" class="text-center">
-                            <h5 class="modal-title">Pedido confirmado</h5>
+                <div class="modal fade" id="Confirme" tabindex="-1" role="dialog" aria-labelledby="Confirme el pedido" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Confirme Pedido</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
-
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Pedido confirmado, el cadete ya está en búsqueda de su producto</p>
-                    </div>
-                    <div class="modal-footer">
-
+                        <div class="modal-body">
+                            <p>Desea confirmar el pedido?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#Success">Confirmar Pedido</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    -->
+            <div class="modal fade" id="Success" tabindex="-1" role="dialog" aria-labelledby="Pedido Confirmado" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div style="width:100%" class="text-center">
+                                <h5 class="modal-title">Pedido confirmado</h5>
+                            </div>
+
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Pedido confirmado, el cadete ya está en búsqueda de su producto</p>
+                        </div>
+                        <div class="modal-footer">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        -->
 
         </div>
     </div>
