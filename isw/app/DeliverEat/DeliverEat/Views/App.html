@@ -165,59 +165,54 @@
             </div>
 
             <div ng-show="validatedCard || validatePaid" class="d-flex flex-column text-center" style="margin:inherit; padding:5px 0px 10px 0px">
-                <!-- TODO: boton que abre el modal y le pasa las ref del centro de cordoba -->
-                <!--<button type="button" class="btn btn-primary" ng-click="validateOrder()">
-            Validar pedido
-        </button>-->
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Confirme">
+                <button type="button" class="btn btn-primary" ng-click="validateOrder()">
                     Realizar Pedido
                 </button>
             </div>
 
-
-
-
+            <!--
             <div class="modal fade" id="Confirme" tabindex="-1" role="dialog" aria-labelledby="Confirme el pedido" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Confirme Pedido</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p>Desea confirmar el pedido?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#Success">Confirmar Pedido</button>
-                        </div>
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirme Pedido</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Desea confirmar el pedido?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#Success">Confirmar Pedido</button>
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="Success" tabindex="-1" role="dialog" aria-labelledby="Pedido Confirmado" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <div style="width:100%" class="text-center">
-                                <h5 class="modal-title">Confirmado</h5>
-                                <img style="max-width:10px" src="../images/Check.svg" />
-                            </div>
-                            
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+        </div>
+        <div class="modal fade" id="Success" tabindex="-1" role="dialog" aria-labelledby="Pedido Confirmado" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div style="width:100%" class="text-center">
+                            <h5 class="modal-title">Pedido confirmado</h5>
                         </div>
-                        <div class="modal-body">
-                            <p>Pedido confirmado, el cadete ya esta en busqueda de su producto</p>
-                        </div>
-                        <div class="modal-footer">
-                           
-                        </div>
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Pedido confirmado, el cadete ya está en búsqueda de su producto</p>
+                    </div>
+                    <div class="modal-footer">
+
                     </div>
                 </div>
             </div>
+        </div>
+    -->
+
         </div>
     </div>
 </body>

@@ -218,13 +218,6 @@ app.controller("myCtrl", function ($scope) {
             if (!$scope.validatePaid) console.log('Revise el monto ingresado');
             else console.log('Revise los datos de la tarjeta');
         }
-
-        else {
-            if (confirm("¿Estás seguro(a) de realizar este pedido?")) {
-                console.log("Pedido realizado con éxito.")
-            };
-            
-
-        };
+        else if (confirm("¿Estás seguro(a) de realizar este pedido?")) console.log("Pedido realizado con éxito.");
         };
 });
