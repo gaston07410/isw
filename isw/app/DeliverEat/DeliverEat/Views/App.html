@@ -116,7 +116,7 @@
             <select class="margin-on-form col rounded" style="width:auto" ng-change="validateMethod()" ng-model="selectedPaymentMethods">
                 <option ng-repeat="method in paymentMethods" value="{{method.name}}">{{method.name}}</option>
             </select>
-            <div>
+            <div style="padding:10px 20px 10px 5px">
                 <a ng-show="selectedPaymentMethods">Monto a pagar: {{price | currency}}</a>
             </div>
 
@@ -172,18 +172,18 @@
             </div>
 
             <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#message" data-lat="-31.4208233" data-long="-64.1887394"></button>
-    <div class="modal fade" id="message" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
-        <div class="modal-dialog" role="contentinfo">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div id="search">Agregar mensaje acá</div>
+            <div class="modal fade" id="message" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+                <div class="modal-dialog" role="contentinfo">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div id="search">Agregar mensaje acá</div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    </div> -->
+            </div> -->
         </div>
     </div>
 </body>

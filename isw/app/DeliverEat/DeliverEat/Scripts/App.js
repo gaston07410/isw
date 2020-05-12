@@ -156,15 +156,11 @@ app.controller("myCtrl", function ($scope) {
         };
 
         $.ajax(settings).done(function (response) {
-            
             resp = response.results[0];
             $scope.commerceStreet = resp.street;
             $scope.commerceNumber = resp.house;
             $scope.commerceCity = resp.region + ", " + resp.area;
-           
         });
-
-        
     };
 
     $scope.validateMethod = function () {
@@ -196,15 +192,11 @@ app.controller("myCtrl", function ($scope) {
         if ($scope.cardExpirationDate.getMonth() < $scope.monthDate || $scope.cardExpirationDate.getFullYear() < $scope.yearDate) console.log("Ingrese fecha válida.");
         else {
             $scope.cardsAccepted.forEach(function (card) {
-                /*console.log("$scope.cardExpirationDate.getMonth()", $scope.cardExpirationDate.getMonth());
-                console.log("$scope.monthDate", card.monthExpirationDate);
-                console.log("$scope.cardExpirationDate.getFullYear()", $scope.cardExpirationDate.getFullYear());
-                console.log("$scope.yearDate", card.yearExpirationDate);*/
                 // No es !== porque algunos son strings y otros son number
                 if (card.number == $scope.cardNumber) {
-                    // TODO: Agregar validación por expiration date
-                    if (card.number != $scope.cardNumber ||
-                        card.type.toLowerCase() != $scope.cardType.toLowerCase() ||
+                    // TODO: agregar mensaje de error cuando no es tarjeta VISA
+                    if (card.type.toLowerCase() !== 'visa') console.log("Solo se permite tarjetas VISA");
+                    if (card.type.toLowerCase() != $scope.cardType.toLowerCase() ||
                         card.name.toLowerCase() != $scope.cardName.toLowerCase() ||
                         ($scope.cardExpirationDate.getMonth() !== card.monthExpirationDate && $scope.cardExpirationDate.getFullYear() !== card.yearExpirationDate) ||
                         card.cvc != $scope.cardCvc ||
@@ -216,7 +208,7 @@ app.controller("myCtrl", function ($scope) {
     };
 
     $scope.validateOrder = function () {
-        // Ej: if ($scope.commerceStreet || $scope.commerceNumber ) y demás...
+        // TODO: agregar mensaje de error en cada caso
         if (!$scope.search) console.log('Cargue algo para que el cadete busque');
         else if (!$scope.commerceStreet || !$scope.commerceNumber || !$scope.commerceCity) console.log('Revise los campos del domicilio del comercio');
         else if (!$scope.homeStreet || !$scope.homeNumber || !$scope.homeCity) console.log('Revise los campos del domicilio de entrega');
