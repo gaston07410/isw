@@ -199,8 +199,8 @@ app.controller("myCtrl", function ($scope) {
 
     $scope.validateCorrectCard = function () {
         if ($scope.cardType.toLowerCase() !== 'visa') toastr.error('Solo se aceptan tarjetas VISA.');
-        if (!$scope.cardExpirationDate || ($scope.cardExpirationDate.getMonth() < $scope.monthDate || $scope.cardExpirationDate.getFullYear() < $scope.yearDate)) toastr.error("Ingrese fecha válida");
-        if (!$scope.cardType || !$scope.cardName || !$scope.cardLastname || !$scope.cardNumber || !$scope.cardExpirationDate || !$scope.cardCvc) toastr.error("Complete todos los datos de la tarjeta");
+        else if (!$scope.cardExpirationDate || ($scope.cardExpirationDate.getMonth() < $scope.monthDate || $scope.cardExpirationDate.getFullYear() < $scope.yearDate)) toastr.error("Ingrese fecha válida");
+        else if (!$scope.cardType || !$scope.cardName || !$scope.cardLastname || !$scope.cardNumber || !$scope.cardExpirationDate || !$scope.cardCvc) toastr.error("Complete todos los datos de la tarjeta");
         else {
             $scope.cardsAccepted.forEach(function (card) {
                 if (card.number != $scope.cardNumber ||

@@ -177,13 +177,13 @@
             </div>
 
             <div ng-show="validatedCard || validatePaid" class="d-flex flex-column text-center" style="margin:inherit; padding:5px 0px 10px 0px">
-                <button type="button" class="btn btn-primary" ng-click="validateOrder()">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Confirme">
                     Realizar Pedido
                 </button>
             </div>
 
-            <!--
-                <div class="modal fade" id="Confirme" tabindex="-1" role="dialog" aria-labelledby="Confirme el pedido" aria-hidden="true">
+            
+            <div class="modal fade" id="Confirme" tabindex="-1" role="dialog" aria-labelledby="Confirme el pedido" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -197,33 +197,11 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#Success">Confirmar Pedido</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="validateOrder()">Confirmar Pedido</button>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal fade" id="Success" tabindex="-1" role="dialog" aria-labelledby="Pedido Confirmado" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <div style="width:100%" class="text-center">
-                                <h5 class="modal-title">Pedido confirmado</h5>
-                            </div>
-
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p>Pedido confirmado, el cadete ya está en búsqueda de su producto</p>
-                        </div>
-                        <div class="modal-footer">
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        -->
+            </div>       
 
         </div>
     </div>
