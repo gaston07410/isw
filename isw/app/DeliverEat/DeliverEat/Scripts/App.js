@@ -4,7 +4,8 @@
 function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 15,
-        center: { lat: -31.4199055, lng: -64.1887394 }
+        center: { lat: -31.4199055, lng: -64.1887394 },
+        gestureHandling: "greedy"
        
     });
 // insertar marcador//
@@ -157,8 +158,9 @@ app.controller("myCtrl", function ($scope) {
 
         $.ajax(settings).done(function (response) {
             resp = response.results[0];
+            console.log(resp)
             $scope.commerceStreet = resp.street;
-            $scope.commerceNumber = resp.house;
+            $scope.commerceNumber = parseInt(resp.house);
             $scope.commerceCity = resp.region + ", " + resp.area;
         });
     };
@@ -216,6 +218,13 @@ app.controller("myCtrl", function ($scope) {
             if (!$scope.validatePaid) console.log('Revise el monto ingresado');
             else console.log('Revise los datos de la tarjeta');
         }
-        else console.log("Pedido realizado con éxito.");
-    };
+
+        else {
+            if (confirm("¿Estás seguro(a) de realizar este pedido?")) {
+                console.log("Pedido realizado con éxito.")
+            };
+            
+
+        };
+        };
 });
