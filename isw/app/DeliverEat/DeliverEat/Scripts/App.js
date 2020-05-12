@@ -47,6 +47,10 @@ var app = angular.module("myApp", []);
 
 app.controller("myCtrl", function ($scope) {
 
+    var date = new Date();
+    $scope.monthDate = date.getMonth();
+    $scope.yearDate = date.getFullYear();
+
     $scope.search = '';
 
     $scope.commerceStreet = '';
@@ -95,9 +99,8 @@ app.controller("myCtrl", function ($scope) {
     $scope.cardNumber = '';
 
     $scope.cardsAccepted = [
-        // TODO: Cambiar el expirtionDate. Que sea efectivamente una fecha.
-        { number: 1234123412341234, name: "Lionel", lastname: "Messi", expirationDate: '09/25', cvc: 123, type: "visa" },
-        { number: 1111111111111111, name: "Paulo", lastname: "Dybala", expirationDate: '09/25', cvc: 999, type: "visa" }
+        { number: 1234123412341234, name: "Lionel", lastname: "Messi", monthExpirationDate: 9, yearExpirationDate: 2020, cvc: 123, type: "visa" },
+        { number: 1111111111111111, name: "Paulo", lastname: "Dybala", monthExpirationDate: 9, yearExpirationDate: 2020, cvc: 999, type: "visa" }
     ];
 
     $scope.cardsType = [
@@ -109,21 +112,18 @@ app.controller("myCtrl", function ($scope) {
     $scope.validatePaid = false;
 
     $scope.saveMap = function () {
-        console.log("marker", marker);
         lat = marker.getPosition().lat();
         lng = marker.getPosition().lng();
-        console.log("lat", lat);
-        console.log("lon", lng);
         var settings = {
             "async": false,
             "crossDomain": true,
-            "url": "https://trueway-geocoding.p.rapidapi.com/ReverseGeocode?language=en&location="+lat+"%252C"+lng,
+            "url": "https://trueway-geocoding.p.rapidapi.com/ReverseGeocode?language=en&location=" + lat + "%252C" + lng,
             "method": "GET",
             "headers": {
                 "x-rapidapi-host": "trueway-geocoding.p.rapidapi.com",
                 "x-rapidapi-key": "8f841d33e4mshbf9cbdc007175bfp1e0139jsn51ca6697e01a"
             }
-        }
+        };
 
         $.ajax(settings).done(function (response) {
             
@@ -137,9 +137,16 @@ app.controller("myCtrl", function ($scope) {
         
     };
 
+    $scope.validateMethod = function () {
+        if ($scope.selectedPaymentMethods === 'Efectivo') $scope.validatedCard = false;
+        else $scope.validatePaid = false;
+    };
+
     $scope.validatePay = function () {
-        // TODO: Mostrar un mensaje de error en el caso que el monto ingresado sea menor al monto a pagar.
-        if ($scope.price > $scope.amountToPay) $scope.validatePaid = false;
+        if ($scope.price > $scope.amountToPay) {
+            $scope.change = 0;
+            $scope.validatePaid = false;
+        }
         else {
             $scope.change = $scope.amountToPay - $scope.price;
             $scope.validatePaid = true;
@@ -150,32 +157,43 @@ app.controller("myCtrl", function ($scope) {
         $scope.CurrentDate = new Date();
 
         if ($scope.cardExpirationDate.getTime() <= $scope.CurrentDate.getTime()) {
-            console.log($scope.model_fecha);
-            console.log($scope.CurrentDate);
             alert("fecha de vencimiento menor a la fecha de hoy ");
         } else { alert("La fecha de vencimiento es mayor a la fecha de hoy")}
     };
 
 
     $scope.validateCorrectCard = function () {
-        $scope.cardsAccepted.forEach(function (card) {
-            console.log("$scope.cardsAccepted.expirationDate", card.expirationDate);
-            console.log("$scope.cardNumber", $scope.cardExpirationDate);
-            // TODO: Agregar validación por expiration date
-            // No es !== porque algunos son strings y otros son number
-            if (card.number == $scope.cardNumber) {
-                if (card.number != $scope.cardNumber ||
-                    card.type.toLowerCase() != $scope.cardType.toLowerCase() ||
-                    card.name.toLowerCase() != $scope.cardName.toLowerCase() ||
-                    card.cvc != $scope.cardCvc ||
-                    card.lastname.toLowerCase() != $scope.cardLastname.toLowerCase()) console.log("Los datos de la tarjeta son incorrectos");
-                else $scope.validatedCard = true;
-            } 
-        });
+        if ($scope.cardExpirationDate.getMonth() < $scope.monthDate || $scope.cardExpirationDate.getFullYear() < $scope.yearDate) console.log("Ingrese fecha válida.");
+        else {
+            $scope.cardsAccepted.forEach(function (card) {
+                /*console.log("$scope.cardExpirationDate.getMonth()", $scope.cardExpirationDate.getMonth());
+                console.log("$scope.monthDate", card.monthExpirationDate);
+                console.log("$scope.cardExpirationDate.getFullYear()", $scope.cardExpirationDate.getFullYear());
+                console.log("$scope.yearDate", card.yearExpirationDate);*/
+                // No es !== porque algunos son strings y otros son number
+                if (card.number == $scope.cardNumber) {
+                    // TODO: Agregar validación por expiration date
+                    if (card.number != $scope.cardNumber ||
+                        card.type.toLowerCase() != $scope.cardType.toLowerCase() ||
+                        card.name.toLowerCase() != $scope.cardName.toLowerCase() ||
+                        ($scope.cardExpirationDate.getMonth() !== card.monthExpirationDate && $scope.cardExpirationDate.getFullYear() !== card.yearExpirationDate) ||
+                        card.cvc != $scope.cardCvc ||
+                        card.lastname.toLowerCase() != $scope.cardLastname.toLowerCase()) $scope.validatedCard = false;
+                    else $scope.validatedCard = true;
+                }
+            });
+        }
     };
 
     $scope.validateOrder = function () {
-        //TODO: Validar que los campos obligatorios estén ingresados
         // Ej: if ($scope.commerceStreet || $scope.commerceNumber ) y demás...
+        if (!$scope.search) console.log('Cargue algo para que el cadete busque');
+        else if (!$scope.commerceStreet || !$scope.commerceNumber || !$scope.commerceCity) console.log('Revise los campos del domicilio del comercio');
+        else if (!$scope.homeStreet || !$scope.homeNumber || !$scope.homeCity) console.log('Revise los campos del domicilio de entrega');
+        else if (!$scope.validatePaid && !$scope.validatedCard) {
+            if (!$scope.validatePaid) console.log('Revise el monto ingresado');
+            else console.log('Revise los datos de la tarjeta');
+        }
+        else console.log("Pedido realizado con éxito.");
     };
 });

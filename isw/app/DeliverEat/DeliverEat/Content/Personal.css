@@ -6,7 +6,8 @@
 
 .fields {
     margin: 4px;
-    width: 100%
+    width: 100%;
+    padding: 0px 14px 0px 14px
 }
 
 .margin-on-form {
