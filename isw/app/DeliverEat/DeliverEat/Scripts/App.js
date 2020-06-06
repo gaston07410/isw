@@ -139,7 +139,7 @@ app.controller("myCtrl", function ($scope) {
     $scope.cardNumber = '';
 
     $scope.cardsAccepted = [
-        { number: 1234123412341234, name: "Lionel", lastname: "Messi", monthExpirationDate: 9, yearExpirationDate: 2020, cvc: 123, type: "visa" }
+        { number: 4234123412341234, name: "Lionel", lastname: "Messi", monthExpirationDate: 9, yearExpirationDate: 2020, cvc: 123, type: "visa" }
     ];
 
     $scope.cardsType = [
@@ -159,14 +159,13 @@ app.controller("myCtrl", function ($scope) {
             "url": "https://trueway-geocoding.p.rapidapi.com/ReverseGeocode?language=en&location=" + lat + "%252C" + lng,
             "method": "GET",
             "headers": {
-                "x-rapidapi-host": "trueway-geocoding.p.rapidapi.com",
+                "x-rapidapi-host": "trueway-geocoding.p.rapidapi.com",  
                 "x-rapidapi-key": "8f841d33e4mshbf9cbdc007175bfp1e0139jsn51ca6697e01a"
             }
         };
 
         $.ajax(settings).done(function (response) {
             resp = response.results[0];
-            console.log("response", response);
             $scope.commerceStreet = resp.street;
             $scope.commerceNumber = parseInt(resp.house);
             $scope.commerceCity = resp.region + ", " + resp.area;
@@ -199,8 +198,8 @@ app.controller("myCtrl", function ($scope) {
 
     $scope.validateCorrectCard = function () {
         if ($scope.cardType.toLowerCase() !== 'visa') toastr.error('Solo se aceptan tarjetas VISA.');
-        else if (!$scope.cardExpirationDate || ($scope.cardExpirationDate.getMonth() < $scope.monthDate || $scope.cardExpirationDate.getFullYear() < $scope.yearDate)) toastr.error("Ingrese fecha válida");
-        else if (!$scope.cardType || !$scope.cardName || !$scope.cardLastname || !$scope.cardNumber || !$scope.cardExpirationDate || !$scope.cardCvc) toastr.error("Complete todos los datos de la tarjeta");
+        else if (!$scope.cardExpirationDate || ($scope.cardExpirationDate.getMonth() < $scope.monthDate || $scope.cardExpirationDate.getFullYear() < $scope.yearDate)) toastr.error("Ingrese fecha válida.");
+        else if (!$scope.cardType || !$scope.cardName || !$scope.cardLastname || !$scope.cardNumber || !$scope.cardExpirationDate || !$scope.cardCvc) toastr.error("Complete todos los datos de la tarjeta.");
         else {
             $scope.cardsAccepted.forEach(function (card) {
                 if (card.number != $scope.cardNumber ||
@@ -209,10 +208,15 @@ app.controller("myCtrl", function ($scope) {
                     ($scope.cardExpirationDate.getMonth() !== card.monthExpirationDate && $scope.cardExpirationDate.getFullYear() !== card.yearExpirationDate) ||
                     card.cvc != $scope.cardCvc ||
                     card.lastname.toLowerCase() != $scope.cardLastname.toLowerCase()) {
+                    if (isNaN($scope.cardNumber) || $scope.cardNumber.length != 16) toastr.error('El número de la tarjeta debe ser un número.');
+                    else if (isNaN($scope.cardCvc) || $scope.cardCvc.length != 3) toastr.error('El CVC debe tener 3 dígitos y debe ser un número.');
+                    else toastr.error('Ingrese tarjeta válida');
                     $scope.validatedCard = false;
-                    toastr.error('Ingrese tarjeta válida');
                 }
-                else $scope.validatedCard = true;
+                else {
+                    $scope.validatedCard = true;
+                    toastr.success("Tarjeta válida");
+                }
             });
         }
     };
@@ -220,8 +224,8 @@ app.controller("myCtrl", function ($scope) {
     $scope.validateOrder = function () {
 
         if (!$scope.search) toastr.error('Complete el campo con lo que el cadete debe buscar');
-        else if (!$scope.commerceStreet || !$scope.commerceNumber || !$scope.commerceCity) toastr.error('Revise los campos del domicilio del comercio');
-        else if (!$scope.homeStreet || !$scope.homeNumber || !$scope.homeCity) toastr.error('Revise los campos del domicilio de entrega');
+        else if (!$scope.commerceStreet || !$scope.commerceNumber || $scope.commerceNumber < 0 || !$scope.commerceCity) toastr.error('Revise los campos del domicilio del comercio');
+        else if (!$scope.homeStreet || !$scope.homeNumber || !$scope.homeCity || $scope.homeNumber < 0) toastr.error('Revise los campos del domicilio de entrega');
         else if (!$scope.dateOfDelivery || ($scope.dateOfDelivery === 'Otro' && !$scope.dateDelivery) || $scope.invalidDate) toastr.error('Revise los campos de la fecha de entrega');
         else if (!$scope.validatePaid && !$scope.validatedCard) {
             if (!$scope.validatePaid) toastr.error('Revise el monto ingresado');
